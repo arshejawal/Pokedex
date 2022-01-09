@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
@@ -40,6 +39,22 @@ public class PokemonService {
     }
 
 
+    public ResponseEntity<Map<String, String>> getPokemonTranslatedInformation(String pokemonName) {
+
+        log.info(" Calling getPokemonTranslatedDescription() method in PokemonService....!! ");
+
+        final ResponseEntity<Pokemon> basicDetails ;
+        final ResponseEntity<Map<String, String>> customisedResponse;
+        final String translatedDescription;
+
+        basicDetails = pokemonComponent.getPokemonBasicInformation(pokemonName, restTemplate);
+
+        translatedDescription=pokemonComponent.getTranslatedDescription(basicDetails,restTemplate);
+
+        customisedResponse = pokemonComponent.generateResponse(basicDetails,translatedDescription);
+
+        return customisedResponse;
+    }
 
 
 

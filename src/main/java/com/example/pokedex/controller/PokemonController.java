@@ -28,4 +28,13 @@ public class PokemonController {
         return pokemonService.getPokemonBasicInformation(pokemonName);
     }
 
+
+    @GetMapping("/translated/{pokemonName}")
+    public ResponseEntity<Map<String, String>> getPokemonTranslatedInformation(@PathVariable(value = "pokemonName") String pokemonName){
+
+        log.info(" Calling getPokemonTranslatedInformation() method in PokemonController....!! ");
+
+        return pokemonService.getPokemonTranslatedInformation(pokemonName);
+    }
+
 }

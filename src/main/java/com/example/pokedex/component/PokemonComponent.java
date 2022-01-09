@@ -1,6 +1,7 @@
 package com.example.pokedex.component;
 
 import com.example.pokedex.model.Pokemon;
+import com.example.pokedex.model.TranslatedDescription;
 import com.example.pokedex.utils.PokemonConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -89,6 +90,51 @@ public class PokemonComponent {
     public String removeSpecialCharacters(String inputString){
 
         return inputString.replaceAll("[^a-zA-Z0-9]", " ");
+    }
+
+
+    /**
+     * This method return Translated Description for Pokemon.
+     * @param basicDetails - Basic Information Details by calling Pokemon API
+     * @param restTemplate - To communicate with Translation service API
+     */
+    public String getTranslatedDescription(ResponseEntity<Pokemon> basicDetails,RestTemplate restTemplate){
+
+        log.info(" Calling getTranslatedDescription() method in PokemonComponent....!! ");
+
+        final String translatedDescription;
+        final TranslatedDescription translatedDescContents;
+        final String habitatName;
+        final String is_legendary;
+
+        habitatName = basicDetails.getBody().getHabitat().getName();
+        is_legendary = basicDetails.getBody().getIs_legendary();
+
+        String standardDescription = this.getStandardDescription(basicDetails);
+
+        /**
+         * Call to Shakespeare translator / Yoda translator API for Translation of Pokemon Description
+         */
+        final String shakespeareUrl = PokemonConstants.SHAKESPEARE_TRANSLATOR_URL+"?text="+standardDescription;
+        final String yodaUrl = PokemonConstants.YODA_TRANSLATOR_URL+"?text="+standardDescription;
+
+
+        if ((null != habitatName && habitatName.equals(PokemonConstants.POKEMON_HABITAT_CAVE))
+                || (null != is_legendary && is_legendary.equals(PokemonConstants.POKEMON_IS_LEGENDARY_TRUE))){
+
+            translatedDescContents = restTemplate.getForObject(yodaUrl, TranslatedDescription.class);
+
+        }else{
+            translatedDescContents = restTemplate.getForObject(shakespeareUrl, TranslatedDescription.class);
+        }
+        /**
+         * End
+         */
+
+
+        translatedDescription=translatedDescContents.getContents().getTranslated();
+
+        return translatedDescription;
     }
 
 }

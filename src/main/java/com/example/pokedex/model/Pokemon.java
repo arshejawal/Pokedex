@@ -2,6 +2,9 @@ package com.example.pokedex.model;
 
 import lombok.*;
 
+/**
+ * @apiNote class for Pokemon Basic Information
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
