@@ -89,7 +89,7 @@ public class PokemonComponent {
      */
     public String removeSpecialCharacters(String inputString){
 
-        return inputString.replaceAll("[^a-zA-Z0-9]", " ");
+        return inputString.replaceAll("[\\n\\r\\t\\f]+", " ");
     }
 
 
