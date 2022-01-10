@@ -35,7 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<Object> handleNullPointerException(IllegalStateException exception, WebRequest request) {
+    public ResponseEntity<Object> handleIllegalStateException(IllegalStateException exception, WebRequest request) {
 
         PokemonException pokemonException = new PokemonException(new Date(), exception.getMessage(), request.getDescription(false));
 
@@ -48,6 +48,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         PokemonException pokemonException = new PokemonException(new Date(), exception.getMessage(), request.getDescription(false));
 
         return new ResponseEntity(pokemonException, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> handleNullPointerException(NullPointerException exception, WebRequest request) {
+
+        PokemonException pokemonException = new PokemonException(new Date(), exception.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity(pokemonException, HttpStatus.NOT_FOUND);
     }
 
 }
